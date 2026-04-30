@@ -1,5 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
+import os
 
 # --- 1. 核心配置 ---
 # 先從 OS 環境變數抓取 (Render 專用)，如果抓不到再找 st.secrets (本地專用)
