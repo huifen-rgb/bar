@@ -2,10 +2,16 @@ import streamlit as st
 import google.generativeai as genai
 
 # --- 1. 核心配置 ---
-if "GOOGLE_API_KEY" in st.secrets:
-    genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
-else:
-    st.error("❌ 未偵測到 API Key，請檢查 secrets.toml")
+# 使用 .get() 避免 secrets 完全不存在時觸發致命錯誤
+try:
+    api_key = st.secrets.get("GOOGLE_API_KEY")
+    if api_key:
+        genai.configure(api_key=api_key)
+    else:
+        st.error("❌ 未偵測到 API Key。請在 Render 環境變數中設定 'GOOGLE_API_KEY'。")
+        st.stop()
+except Exception:
+    st.error("⚠️ 無法讀取 Secrets。請確認 Render 的 Environment 已經設定好 GOOGLE_API_KEY。")
     st.stop()
 
 # 升級為 2026 最新型號
